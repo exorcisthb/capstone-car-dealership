@@ -17,10 +17,12 @@ echo "=== [2/6] Pulling latest changes ==="
 git pull origin main
 
 echo "=== [3/6] Installing Python dependencies ==="
-# IMPORTANT: lab has python3 (3.10) as default, with old pip.
-# --break-system-packages is needed for modern pip on system Python.
-python3 -m pip install --quiet --break-system-packages --upgrade pip
-python3 -m pip install --quiet --break-system-packages -r server/requirements.txt
+# Lab's pip (22.0.2) is old and doesn't support --break-system-packages.
+# Install into the system site-packages directly with --target so it works
+# even on a protected dist-packages.
+SITE_PKGS="/usr/local/lib/python3.10/dist-packages"
+echo "Installing into: $SITE_PKGS"
+python3 -m pip install --quiet --target="$SITE_PKGS" -r server/requirements.txt
 # Sanity check
 python3 -c "import django; print('Django version:', django.__version__)" || { echo "Django install FAILED"; exit 1; }
 
