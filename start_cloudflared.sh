@@ -12,10 +12,12 @@ if ! python3 -c "import django" 2>/dev/null; then
     exit 1
 fi
 
-# Kill any prior Django/cloudflared on port 8000
+# Kill any prior Django/ngrok, but NOT cloudflared yet (use a precise match
+# against the binary, not the script name, so this script itself isn't killed).
 echo "=== Cleaning up old processes on port 8000 ==="
+fuser -k 8000/tcp 2>/dev/null || true
 pkill -f "manage.py runserver" 2>/dev/null || true
-pkill -f cloudflared 2>/dev/null || true
+pkill -x ngrok 2>/dev/null || true
 sleep 2
 
 # Start Django in background
@@ -23,6 +25,7 @@ echo "=== Starting Django on port 8000 ==="
 cd server
 nohup python3 manage.py runserver 0.0.0.0:8000 > ~/django.log 2>&1 &
 DJANGO_PID=$!
+disown $DJANGO_PID 2>/dev/null || true
 echo "Django PID: $DJANGO_PID"
 sleep 4
 
@@ -42,11 +45,12 @@ cd ..
 
 # Start cloudflared quick tunnel (no auth needed)
 echo "=== Starting Cloudflare Tunnel ==="
-# --url flag creates a temporary public URL; no signup required
-nohup ./cloudflared tunnel --no-autoupdate --url http://localhost:8000 > ~/cloudflared.log 2>&1 &
+# Detach completely so the script can exit and leave cloudflared running.
+setsid nohup ./cloudflared tunnel --no-autoupdate --url http://localhost:8000 </dev/null >~/cloudflared.log 2>&1 &
 CF_PID=$!
+disown $CF_PID 2>/dev/null || true
 echo "cloudflared PID: $CF_PID"
-sleep 8
+sleep 10
 
 # Extract public URL from log
 PUBLIC_URL=$(grep -oE "https://[a-z0-9-]+\.trycloudflare\.com" ~/cloudflared.log | head -1)
@@ -64,8 +68,6 @@ echo ""
 echo "Save this URL in deploymentURL.txt:"
 echo "  $PUBLIC_URL"
 echo ""
-echo "Press Ctrl+C to stop Django and cloudflared."
-echo ""
 
 # Save URL
 echo "$PUBLIC_URL" > ~/deployed_url.txt
@@ -78,5 +80,5 @@ else
     echo "URL returned non-2xx (might still be fine for screenshots)."
 fi
 echo ""
-
-wait
+echo "Both Django and cloudflared are detached and still running."
+echo "You can close this terminal or run: pkill -f manage.py && pkill -x cloudflared"
