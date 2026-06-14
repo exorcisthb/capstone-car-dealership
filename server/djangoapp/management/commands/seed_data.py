@@ -150,7 +150,7 @@ class Command(BaseCommand):
             User.objects.create_user('testuser', 'test@example.com', 'TestPass123')
             self.stdout.write(self.style.SUCCESS('Created test user (testuser/TestPass123)'))
 
-        # ----- Reviews -----
+        # ----- Reviews (idempotent: key on (dealer, name) so re-runs don't duplicate) -----
         dealers = list(Dealer.objects.all())
         makes = list(CarMake.objects.prefetch_related('car_models').all())
         for i, (name, text, purchased, year) in enumerate(SAMPLE_REVIEWS):
@@ -158,11 +158,14 @@ class Command(BaseCommand):
             make = makes[i % len(makes)]
             model = list(make.car_models.all())[0]
             sentiment, _ = analyze_sentiment(text)
-            Review.objects.create(
-                dealer=dealer, name=name, review_text=text,
-                purchase=purchased, car_year=year,
-                car_make=make, car_model=model, sentiment=sentiment,
+            Review.objects.update_or_create(
+                dealer=dealer, name=name,
+                defaults={
+                    'review_text': text,
+                    'purchase': purchased, 'car_year': year,
+                    'car_make': make, 'car_model': model, 'sentiment': sentiment,
+                },
             )
-        self.stdout.write(self.style.SUCCESS(f'Created {len(SAMPLE_REVIEWS)} reviews'))
+        self.stdout.write(self.style.SUCCESS(f'Created/updated {len(SAMPLE_REVIEWS)} reviews'))
 
         self.stdout.write(self.style.SUCCESS('=== Seed complete ==='))
