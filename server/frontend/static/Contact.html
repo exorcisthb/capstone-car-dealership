@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Car Dealership Reviews</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="extra.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" href="index.html">CarDealership Reviews</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="About.html">About Us</a></li>
+                <li><a href="Contact.html" class="active">Contact Us</a></li>
+                <li><a href="dealers.html">Dealers</a></li>
+                <li><a href="register.html" class="nav-btn">Sign Up</a></li>
+                <li><a href="login.html" class="nav-btn">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="contact-hero">
+            <h1>Contact Us</h1>
+            <p class="lead">Have questions, feedback, or partnership ideas? We'd love to hear from you.</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="info-block">
+                    <h3>Address</h3>
+                    <p>123 Main Street<br>San Francisco, CA 94105<br>United States</p>
+                </div>
+                <div class="info-block">
+                    <h3>Phone</h3>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+                <div class="info-block">
+                    <h3>Email</h3>
+                    <p>support@cardealreviews.com</p>
+                </div>
+                <div class="info-block">
+                    <h3>Business Hours</h3>
+                    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM<br>Sunday: Closed</p>
+                </div>
+                <div class="info-block">
+                    <h3>Follow Us</h3>
+                    <p>
+                        <a href="#">Facebook</a> &middot;
+                        <a href="#">Twitter</a> &middot;
+                        <a href="#">LinkedIn</a> &middot;
+                        <a href="#">Instagram</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper">
+                <h2>Send us a message</h2>
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Thanks! We will get back to you soon.');">
+                    <label>Name</label>
+                    <input type="text" name="name" required>
+
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+
+                    <label>Subject</label>
+                    <input type="text" name="subject" required>
+
+                    <label>Message</label>
+                    <textarea name="message" rows="5" required></textarea>
+
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Car Dealership Reviews. Capstone Project.</p>
+    </footer>
+</body>
+</html>

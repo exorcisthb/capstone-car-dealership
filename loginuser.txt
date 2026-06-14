@@ -1,0 +1,20 @@
+================================================================================
+Task 5: cURL command and output - LOGIN
+================================================================================
+
+Command:
+  curl \
+    -X \
+    POST \
+    http://127.0.0.1:8000/djangoapp/login \
+    -H \
+    "Content-Type: application/json" \
+    -d \
+    "{\"userName\": \"testuser\", \"password\": \"TestPass123\"}"
+
+Output:
+{
+  "status": true,
+  "userName": "testuser",
+  "message": "Login successful"
+}

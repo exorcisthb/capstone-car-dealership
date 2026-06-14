@@ -1,0 +1,92 @@
+================================================================================
+Task 9: cURL command and output - ALL DEALERS
+================================================================================
+
+Command:
+  curl \
+    http://127.0.0.1:8000/djangoapp/dealers
+
+Output:
+{
+  "status": true,
+  "dealers": [
+    {
+      "id": 1,
+      "full_name": "Best Cars of Kansas City",
+      "short_name": "Best Cars KC",
+      "city": "Kansas City",
+      "state": "KS",
+      "address": "123 Main St",
+      "zip": "66101",
+      "phone": "555-0101",
+      "email": "sales@bestcarskc.com",
+      "logo_url": "https://images.unsplash.com/photo-1562519819-016930ada31b?w=400",
+      "website": ""
+    },
+    {
+      "id": 2,
+      "full_name": "Topeka Auto Mall",
+      "short_name": "Topeka Auto",
+      "city": "Topeka",
+      "state": "KS",
+      "address": "456 Kansas Ave",
+      "zip": "66601",
+      "phone": "555-0102",
+      "email": "sales@topekaauto.com",
+      "logo_url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400",
+      "website": ""
+    },
+    {
+      "id": 3,
+      "full_name": "Wichita Premier Motors",
+      "short_name": "Wichita Premier",
+      "city": "Wichita",
+      "state": "KS",
+      "address": "789 Douglas Ave",
+      "zip": "67201",
+      "phone": "555-0103",
+      "email": "sales@wichitapremier.com",
+      "logo_url": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400",
+      "website": ""
+    },
+    {
+      "id": 4,
+      "full_name": "Los Angeles Auto Gallery",
+      "short_name": "LA Auto",
+      "city": "Los Angeles",
+      "state": "CA",
+      "address": "100 Hollywood Blvd",
+      "zip": "90001",
+      "phone": "555-0201",
+      "email": "sales@laauto.com",
+      "logo_url": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400",
+      "website": ""
+    },
+    {
+      "id": 5,
+      "full_name": "New York Motors",
+      "short_name": "NY Motors",
+      "city": "New York",
+      "state": "NY",
+      "address": "5th Avenue",
+      "zip": "10001",
+      "phone": "555-0301",
+      "email": "sales@nymotors.com",
+      "logo_url": "https://images.unsplash.com/photo-1542362567-b07e54358753?w=400",
+      "website": ""
+    },
+    {
+      "id": 6,
+      "full_name": "Texas Lone Star Cars",
+      "short_name": "Lone Star",
+      "city": "Houston",
+      "state": "TX",
+      "address": "50 Bayou Dr",
+      "zip": "77001",
+      "phone": "555-0401",
+      "email": "sales@lonestarcars.com",
+      "logo_url": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=400",
+      "website": ""
+    }
+  ]
+}

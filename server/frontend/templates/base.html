@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Car Dealership Reviews{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/bootstrap.css">
+    <link rel="stylesheet" href="/static/extra.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-logo" href="/">CarDealership Reviews</a>
+            <ul class="nav-links">
+                <li><a href="/" class="{% if request.resolver_match.url_name == 'root_home' %}active{% endif %}">Home</a></li>
+                <li><a href="/djangoapp/about/" class="{% if 'about' in request.path %}active{% endif %}">About Us</a></li>
+                <li><a href="/djangoapp/contact/" class="{% if 'contact' in request.path %}active{% endif %}">Contact Us</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/djangoapp/dealer/1/">Dealers</a></li>
+                    <li><a href="#" class="user-badge">Hi, {{ user.username }}</a></li>
+                    <li>
+                        <form action="/djangoapp/logout" method="post" style="display:inline" id="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-btn">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="/login-page/" class="nav-btn">Login</a></li>
+                    <li><a href="/register/" class="nav-btn">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Car Dealership Reviews. Capstone Project.</p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

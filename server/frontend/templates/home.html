@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Car Dealership Reviews{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Find Your Perfect Car Dealership</h1>
+    <p>Read honest reviews from real customers across the United States.</p>
+</div>
+
+<div class="filter-section">
+    <form method="get" action="/">
+        <label for="state">Filter by State:</label>
+        <select name="state" id="state">
+            <option value="">All States</option>
+            {% for code, name in states %}
+                <option value="{{ code }}" {% if state == code %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-primary">Filter</button>
+    </form>
+</div>
+
+<div class="dealers-grid">
+    {% for dealer in dealers %}
+    <div class="dealer-card">
+        <div class="dealer-image">
+            <img src="{% if dealer.logo_url %}{{ dealer.logo_url }}{% else %}https://images.unsplash.com/photo-1562519819-016930ada31b?w=400{% endif %}"
+                 alt="{{ dealer.full_name }}">
+        </div>
+        <div class="dealer-info">
+            <h3>{{ dealer.full_name }}</h3>
+            <p class="dealer-location">{{ dealer.city }}, {{ dealer.state }}</p>
+            <p class="dealer-address">{{ dealer.address }}</p>
+            <p class="dealer-phone">{{ dealer.phone }}</p>
+            <a href="/djangoapp/dealer/{{ dealer.id }}/" class="btn-primary">View Details &amp; Reviews</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>No dealers found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ dealer.full_name }} - Reviews{% endblock %}
+
+{% block content %}
+<div class="dealer-detail-header">
+    <h1>{{ dealer.full_name }}</h1>
+    <p class="dealer-meta">
+        {{ dealer.address }} &middot; {{ dealer.city }}, {{ dealer.state }} {{ dealer.zip_code }}
+    </p>
+    <p>📞 {{ dealer.phone }} &nbsp; ✉️ {{ dealer.email }}</p>
+</div>
+
+<section class="reviews-section">
+    <h2>Customer Reviews ({{ reviews|length }})</h2>
+
+    {% for review in reviews %}
+    <div class="review-card">
+        <div class="review-header">
+            <strong>{{ review.name }}</strong>
+            <span class="sentiment sentiment-{{ review.sentiment }}">{{ review.sentiment }}</span>
+        </div>
+        <p class="review-text">{{ review.review_text }}</p>
+        <small class="review-date">{{ review.created_at|date:"M d, Y" }}</small>
+    </div>
+    {% empty %}
+    <p>No reviews yet. Be the first to share your experience!</p>
+    {% endfor %}
+</section>
+
+{% if user.is_authenticated %}
+<section class="post-review">
+    <h2>Post a Review</h2>
+    <form id="review-form" data-dealer-id="{{ dealer.id }}">
+        <label>Review</label>
+        <textarea name="review" rows="4" required></textarea>
+
+        <label>Car Make</label>
+        <select name="car_make">
+            <option value="">-- Select --</option>
+            {% for cm in car_makes %}
+                <option value="{{ cm.id }}">{{ cm.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Car Year</label>
+        <input type="number" name="car_year" min="1990" max="2026" value="2024">
+
+        <label>
+            <input type="checkbox" name="purchase"> I purchased a car from this dealer
+        </label>
+
+        <button type="submit" class="btn-primary">Submit Review</button>
+    </form>
+</section>
+{% else %}
+<p><a href="/login-page/">Login</a> to post a review.</p>
+{% endif %}
+{% endblock %}

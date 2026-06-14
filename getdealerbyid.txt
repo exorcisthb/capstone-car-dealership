@@ -1,0 +1,25 @@
+================================================================================
+Task 10: cURL command and output - DEALER BY ID (1)
+================================================================================
+
+Command:
+  curl \
+    http://127.0.0.1:8000/djangoapp/dealer/1
+
+Output:
+{
+  "status": true,
+  "dealer": {
+    "id": 1,
+    "full_name": "Best Cars of Kansas City",
+    "short_name": "Best Cars KC",
+    "city": "Kansas City",
+    "state": "KS",
+    "address": "123 Main St",
+    "zip": "66101",
+    "phone": "555-0101",
+    "email": "sales@bestcarskc.com",
+    "logo_url": "https://images.unsplash.com/photo-1562519819-016930ada31b?w=400",
+    "website": ""
+  }
+}

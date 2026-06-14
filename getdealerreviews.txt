@@ -1,0 +1,41 @@
+================================================================================
+Task 8: cURL command and output - DEALER REVIEWS (dealer id=1)
+================================================================================
+
+Command:
+  curl \
+    http://127.0.0.1:8000/djangoapp/reviews/dealer/1
+
+Output:
+{
+  "status": true,
+  "dealer_id": 1,
+  "reviews": [
+    {
+      "id": 7,
+      "dealer_id": 1,
+      "name": "Robert Taylor",
+      "review": "Slow service and the paperwork was a nightmare. Disappointing.",
+      "purchase": false,
+      "purchase_date": null,
+      "car_make": "Toyota",
+      "car_model": "Camry",
+      "car_year": null,
+      "sentiment": "negative",
+      "created_at": "2026-06-14T15:02:48.164168+00:00"
+    },
+    {
+      "id": 1,
+      "dealer_id": 1,
+      "name": "John Smith",
+      "review": "Fantastic services! The team was friendly and professional.",
+      "purchase": true,
+      "purchase_date": null,
+      "car_make": "Toyota",
+      "car_model": "Camry",
+      "car_year": 2023,
+      "sentiment": "positive",
+      "created_at": "2026-06-14T15:02:48.138365+00:00"
+    }
+  ]
+}

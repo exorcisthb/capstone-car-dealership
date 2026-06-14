@@ -1,0 +1,15 @@
+================================================================================
+Task 16: cURL command and output - ANALYZE REVIEW SENTIMENT ("Fantastic services")
+================================================================================
+
+Command:
+  curl \
+    http://127.0.0.1:8000/djangoapp/analyze?text=Fantastic%20services
+
+Output:
+{
+  "status": true,
+  "text": "Fantastic services",
+  "sentiment": "positive",
+  "score": 0.5
+}
