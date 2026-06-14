@@ -101,17 +101,34 @@ async def main():
         print("[OK] added_review.png (Task 22)")
 
         # -------- Task 12: admin_login.png --------
-        await ctx.clear_cookies()
-        await page.goto(f"{BASE}/admin/login/?next=/admin/", wait_until="networkidle")
-        await page.wait_for_timeout(500)
-        await page.fill('input[name="username"]', 'root')
-        await page.fill('input[name="password"]', 'rootpass123')
-        await page.click('input[type="submit"]')
-        await page.wait_for_load_state("networkidle")
-        await page.wait_for_timeout(800)
-        await add_url_banner(page, "Django Admin (logged in as root)")
-        await page.screenshot(path=os.path.join(OUT, "admin_login.png"), full_page=True)
+        # Open a fresh context to avoid cookie/CSRF contamination
+        await ctx.close()
+        ctx2 = await browser.new_context(viewport={"width": 1280, "height": 800})
+        page2 = await ctx2.new_page()
+        await page2.goto(f"{BASE}/admin/login/?next=/admin/", wait_until="networkidle")
+        await page2.wait_for_timeout(800)
+        await page2.fill('input[name="username"]', 'root')
+        await page2.fill('input[name="password"]', 'rootpass123')
+        # Click the actual submit input (button has type=submit in the form)
+        await page2.click('input[type="submit"][value="Log in"]')
+        # Wait until URL changes to /admin/ AND network is idle
+        try:
+            await page2.wait_for_url(lambda u: u.rstrip('/') == f"{BASE}/admin", timeout=15000)
+        except Exception:
+            # If wait_for_url with lambda doesn't work, just wait for the body to be the admin index
+            await page2.wait_for_selector('#site-name', timeout=15000)
+        await page2.wait_for_load_state("networkidle")
+        await page2.wait_for_timeout(2000)
+        # Verify we're really on the admin dashboard
+        title = await page2.title()
+        print(f"  Admin title: {title}")
+        await add_url_banner(page2, "Django Admin (logged in as root)")
+        await page2.screenshot(path=os.path.join(OUT, "admin_login.png"), full_page=True)
         print("[OK] admin_login.png (Task 12)")
+        await ctx2.close()
+        # Restore main context/page for Task 13
+        ctx = await browser.new_context(viewport={"width": 1280, "height": 800})
+        page = await ctx.new_page()
 
         # -------- Task 13: admin_logout.png --------
         await page.goto(f"{BASE}/admin/logout/", wait_until="networkidle")
