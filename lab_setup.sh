@@ -28,9 +28,16 @@ python3 manage.py seed_data
 cd ..
 
 echo "=== [5/6] Downloading cloudflared (free, no signup) ==="
-if [ ! -f "cloudflared" ]; then
-    curl -sL -o cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+if [ ! -x "./cloudflared" ]; then
+    rm -f cloudflared
+    # Use a specific known release to avoid 302/HTML redirects
+    URL="https://github.com/cloudflare/cloudflared/releases/download/2024.12.2/cloudflared-linux-amd64"
+    echo "Downloading from: $URL"
+    curl -fsSL -o cloudflared "$URL"
     chmod +x cloudflared
+    ls -la cloudflared
+    file cloudflared || true
+    ./cloudflared --version || { echo "cloudflared not executable or corrupt"; exit 1; }
 fi
 
 echo "=== [6/6] Setup complete ==="
