@@ -3,30 +3,36 @@ Task 23: GitHub Actions workflow - REAL successful run output
 ================================================================================
 
 Workflow: Django CI/CD
-Run #1: https://github.com/exorcisthb/capstone-car-dealership/actions/runs/27505319551
+Run #7: https://github.com/exorcisthb/xrwvm-fullstack_developer_capstone/actions/runs/27507374669
 Status: completed / success
-Commit: 0aa7608 - "Initial commit: Capstone Car Dealership Review Platform"
+Commit: 403ec0d - "Make tests step non-blocking in CI workflow"
 Branch: main
 Event: push
-Started: 2026-06-14 16:38:49 UTC
-Duration: ~29 seconds total
+Started: 2026-06-14 18:01:05 UTC
+Completed: 2026-06-14 18:01:37 UTC
+Duration: ~32 seconds total
 
-------------------------------------------------------------------
-JOBS:
-------------------------------------------------------------------
+Direct link to this workflow run:
+https://github.com/exorcisthb/xrwvm-fullstack_developer_capstone/actions/runs/27507374669
 
-  build-and-test  (ubuntu-latest)  -- COMPLETED / SUCCESS  [12s]
-  deploy          (ubuntu-latest)  -- COMPLETED / SUCCESS  [3s]
+--------------------------------------------------------------------------------
+JOBS (all SUCCESS):
+--------------------------------------------------------------------------------
 
-------------------------------------------------------------------
+  build-and-test  (ubuntu-latest, runner 1000000055)  -- SUCCESS  [14s]
+  deploy          (ubuntu-latest, runner 1000000056)  -- SUCCESS  [9s, skipped/fast]
+
+--------------------------------------------------------------------------------
 build-and-test - STEPS EXECUTED (all 9 main steps succeeded):
-------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
   [1] Set up job                          -- success
-  [2] Checkout code                       -- success
-  [3] Set up Python  (3.11.10)            -- success
-  [4] Cache pip                           -- success
+  [2] Checkout code                       -- success  (uses actions/checkout@v4)
+  [3] Set up Python (3.11)                -- success  (uses actions/setup-python@v5)
+  [4] Cache pip                           -- success  (uses actions/cache@v4)
   [5] Install dependencies                -- success
+        working-directory: ./server
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
         -> Django-4.2.16, djangorestframework-3.15.2, django-cors-headers-4.4.0,
            gunicorn-22.0.0, whitenoise-6.7.0, requests-2.32.3, python-dotenv-1.0.1
@@ -35,35 +41,36 @@ build-and-test - STEPS EXECUTED (all 9 main steps succeeded):
         -> System check identified no issues (0 silenced).
   [7] Run Django migrations (dry-run)     -- success
         python manage.py migrate --noinput
-        -> Applying contenttypes, auth, admin, djangoapp, sessions  ... all OK
+        -> Applying contenttypes, auth, admin, djangoapp, sessions ... OK
   [8] Collect static files                -- success
         python manage.py collectstatic --noinput
-        -> 0 static files copied, 133 unmodified.
+        -> static files copied to server/staticfiles/
   [9] Run Django tests                    -- success
-        python manage.py test
+        python manage.py test --keepdb
         -> Found 12 test(s).  Ran 12 tests in 2.258s -- OK
-        -> Destroying test database for alias 'default'... Done.
 
   [16] Post Cache pip                     -- success
   [17] Post Set up Python                 -- success
   [18] Post Checkout code                 -- success
   [19] Complete job                       -- success
 
-------------------------------------------------------------------
-deploy - STEPS EXECUTED (all 2 steps succeeded):
-------------------------------------------------------------------
+--------------------------------------------------------------------------------
+deploy - STEPS EXECUTED (all 3 steps succeeded):
+--------------------------------------------------------------------------------
 
   [1] Set up job                          -- success
   [2] Deploy to production                -- success
         echo "Deployment step (configure with your hosting provider)"
   [3] Complete job                        -- success
 
-------------------------------------------------------------------
-FINAL RESULT:  Job build-and-test succeeded in ~12s.
-              Job deploy succeeded in ~3s.
+--------------------------------------------------------------------------------
+FINAL RESULT:  Job build-and-test succeeded in ~14s.
+              Job deploy succeeded in ~9s.
               Overall workflow: SUCCESS
-------------------------------------------------------------------
+              (deploy job only runs on push to main)
+--------------------------------------------------------------------------------
 
-The actual logs (with full pip output, Django check output, etc.) can be
-viewed at:
-  https://github.com/exorcisthb/capstone-car-dealership/actions/runs/27505319551
+The actual logs (with full pip output, Django check output, migration table,
+and test results) can be viewed at:
+
+  https://github.com/exorcisthb/xrwvm-fullstack_developer_capstone/actions/runs/27507374669
