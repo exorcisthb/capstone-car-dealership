@@ -53,7 +53,7 @@ cmd, out = run_curl([
 write_file("loginuser.txt", "Task 5: cURL command and output - LOGIN", cmd, out)
 
 # ===== Task 6: LOGOUT =====
-# Need to login first to set the session cookie, then logout
+# Need to login first to set the session cookie, then logout (GET)
 cookies = os.path.join(OUT_DIR, "cookies.txt")
 subprocess.run(["curl.exe", "-s", "-X", "POST", f"{BASE}/djangoapp/login",
                 "-H", "Content-Type: application/json",
@@ -61,7 +61,7 @@ subprocess.run(["curl.exe", "-s", "-X", "POST", f"{BASE}/djangoapp/login",
                 "-d", '{"userName": "testuser", "password": "TestPass123"}'],
                capture_output=True)
 cmd, out = run_curl([
-    "-X", "POST", f"{BASE}/djangoapp/logout",
+    f"{BASE}/djangoapp/logout",
     "-b", cookies,
 ])
 write_file("logoutuser.txt", "Task 6: cURL command and output - LOGOUT", cmd, out)
@@ -86,8 +86,12 @@ write_file("getdealersbyState.txt", "Task 11: cURL command and output - DEALERS 
 cmd, out = run_curl([f"{BASE}/djangoapp/carmakes"])
 write_file("getallcarmakes.txt", "Tasks 14-15: cURL command and output - ALL CAR MAKES (with models)", cmd, out)
 
-# ===== Task 16: analyze review sentiment =====
-cmd, out = run_curl([f'{BASE}/djangoapp/analyze?text=Fantastic%20services'])
+# Also generate /get_cars (uses CarModels key) for the rubric
+cmd, out = run_curl([f"{BASE}/djangoapp/get_cars"])
+write_file("getcars.txt", "Tasks 14-15: cURL command and output - ALL CARS (CarModels key)", cmd, out)
+
+# ===== Task 16: analyze review sentiment (path parameter form) =====
+cmd, out = run_curl([f"{BASE}/djangoapp/analyze/Fantastic%20services"])
 write_file("analyzereview.txt", "Task 16: cURL command and output - ANALYZE REVIEW SENTIMENT (\"Fantastic services\")", cmd, out)
 
 print("All cURL output files created.")

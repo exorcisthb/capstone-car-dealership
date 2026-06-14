@@ -4,8 +4,6 @@ Task 6: cURL command and output - LOGOUT
 
 Command:
   curl \
-    -X \
-    POST \
     http://127.0.0.1:8000/djangoapp/logout \
     -b \
     c:\Users\exorc\Downloads\ABC\cookies.txt
@@ -13,6 +11,6 @@ Command:
 Output:
 {
   "status": true,
-  "userName": "testuser",
+  "userName": "",
   "message": "User testuser logged out successfully"
 }

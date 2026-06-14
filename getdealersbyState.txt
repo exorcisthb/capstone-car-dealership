@@ -18,10 +18,8 @@ Output:
       "state": "KS",
       "address": "123 Main St",
       "zip": "66101",
-      "phone": "555-0101",
-      "email": "sales@bestcarskc.com",
-      "logo_url": "https://images.unsplash.com/photo-1562519819-016930ada31b?w=400",
-      "website": ""
+      "latitude": 39.1141,
+      "longitude": -94.6275
     },
     {
       "id": 2,
@@ -31,10 +29,8 @@ Output:
       "state": "KS",
       "address": "456 Kansas Ave",
       "zip": "66601",
-      "phone": "555-0102",
-      "email": "sales@topekaauto.com",
-      "logo_url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=400",
-      "website": ""
+      "latitude": 39.0473,
+      "longitude": -95.6752
     },
     {
       "id": 3,
@@ -44,10 +40,8 @@ Output:
       "state": "KS",
       "address": "789 Douglas Ave",
       "zip": "67201",
-      "phone": "555-0103",
-      "email": "sales@wichitapremier.com",
-      "logo_url": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400",
-      "website": ""
+      "latitude": 37.6872,
+      "longitude": -97.3301
     }
   ]
 }

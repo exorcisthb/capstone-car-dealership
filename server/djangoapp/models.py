@@ -64,6 +64,8 @@ class Dealer(models.Model):
     state = models.CharField(max_length=2, choices=STATE_CHOICES)
     address = models.CharField(max_length=300)
     zip_code = models.CharField(max_length=10)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField(blank=True)
     short_name = models.CharField(max_length=100, blank=True)

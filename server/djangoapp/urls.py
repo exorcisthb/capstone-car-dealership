@@ -25,9 +25,11 @@ urlpatterns = [
     path('reviews/dealer/<int:dealer_id>', views.get_dealer_reviews, name='get_dealer_reviews'),
     path('reviews/add', views.add_review, name='add_review'),
 
-    # Car make API
+    # Car APIs (two endpoints that return the same data with different keys)
     path('carmakes', views.get_all_car_makes, name='get_all_car_makes'),
+    path('get_cars', views.get_cars, name='get_cars'),
 
-    # Sentiment
+    # Sentiment (supports both ?text= and /<text> forms)
     path('analyze', views.analyze_review, name='analyze_review'),
+    path('analyze/<path:text>', views.analyze_review_path, name='analyze_review_path'),
 ]

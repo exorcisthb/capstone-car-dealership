@@ -14,7 +14,7 @@ Command:
 
 Output:
 {
-  "status": true,
+  "status": "Authenticated",
   "userName": "testuser",
   "message": "Login successful"
 }

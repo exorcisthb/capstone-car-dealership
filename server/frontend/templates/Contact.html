@@ -2,11 +2,24 @@
 
 {% block title %}Contact Us - Car Dealership Reviews{% endblock %}
 
+{% block extra_nav_class %}active-contact{% endblock %}
+
 {% block content %}
 <div class="contact-hero">
     <h1>Contact Us</h1>
     <p class="lead">Have questions, feedback, or partnership ideas? We'd love to hear from you.</p>
 </div>
+
+<script>
+    // Mark the Contact Us nav link as active on this page
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.nav-links a').forEach(function (a) {
+            if (a.getAttribute('href') && a.getAttribute('href').indexOf('contact') !== -1) {
+                a.classList.add('active');
+            }
+        });
+    });
+</script>
 
 <div class="contact-container">
     <div class="contact-info">

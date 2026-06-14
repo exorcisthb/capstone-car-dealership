@@ -86,7 +86,17 @@ async def main():
         await page.wait_for_timeout(500)
         await page.evaluate("document.querySelector('.post-review')?.scrollIntoView()")
         await page.fill('textarea[name="review"]', 'Great service, very happy with my purchase!')
+        # Select a Car Make (required by the rubric)
+        try:
+            await page.select_option('select[name="car_make"]', label='Toyota')
+        except Exception:
+            await page.select_option('select[name="car_make"]', index=1)
         await page.fill('input[name="car_year"]', '2024')
+        # Purchase date is required by the rubric
+        try:
+            await page.fill('input[name="purchase_date"]', '2024-01-15')
+        except Exception:
+            pass
         await page.check('input[name="purchase"]')
         await page.wait_for_timeout(500)
         await add_url_banner(page, "Post Review page (form filled)")

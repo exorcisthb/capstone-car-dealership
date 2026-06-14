@@ -30,10 +30,13 @@
         </div>
         <div class="dealer-info">
             <h3>{{ dealer.full_name }}</h3>
-            <p class="dealer-location">{{ dealer.city }}, {{ dealer.state }}</p>
-            <p class="dealer-address">{{ dealer.address }}</p>
-            <p class="dealer-phone">{{ dealer.phone }}</p>
+            <p class="dealer-id"><strong>Dealer ID:</strong> {{ dealer.id }}</p>
+            <p class="dealer-location">{{ dealer.city }}, {{ dealer.state }} {{ dealer.zip_code }}</p>
+            <p class="dealer-address"><strong>Address:</strong> {{ dealer.address }}</p>
+            <p class="dealer-zip"><strong>ZIP:</strong> {{ dealer.zip_code }}</p>
+            {% if dealer.phone %}<p class="dealer-phone"><strong>Phone:</strong> {{ dealer.phone }}</p>{% endif %}
             <a href="/djangoapp/dealer/{{ dealer.id }}/" class="btn-primary">View Details &amp; Reviews</a>
+            <a href="/djangoapp/dealer/{{ dealer.id }}/#post-review" class="btn-secondary review-dealer-btn">Review Dealer</a>
         </div>
     </div>
     {% empty %}

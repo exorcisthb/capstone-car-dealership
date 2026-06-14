@@ -29,15 +29,15 @@
 </section>
 
 {% if user.is_authenticated %}
-<section class="post-review">
+<section class="post-review" id="post-review">
     <h2>Post a Review</h2>
     <form id="review-form" data-dealer-id="{{ dealer.id }}">
         <label>Review</label>
         <textarea name="review" rows="4" required></textarea>
 
         <label>Car Make</label>
-        <select name="car_make">
-            <option value="">-- Select --</option>
+        <select name="car_make" required>
+            <option value="">-- Select Make --</option>
             {% for cm in car_makes %}
                 <option value="{{ cm.id }}">{{ cm.name }}</option>
             {% endfor %}
@@ -46,8 +46,11 @@
         <label>Car Year</label>
         <input type="number" name="car_year" min="1990" max="2026" value="2024">
 
+        <label>Purchase Date</label>
+        <input type="date" name="purchase_date" value="2024-01-15">
+
         <label>
-            <input type="checkbox" name="purchase"> I purchased a car from this dealer
+            <input type="checkbox" name="purchase" checked> I purchased a car from this dealer
         </label>
 
         <button type="submit" class="btn-primary">Submit Review</button>

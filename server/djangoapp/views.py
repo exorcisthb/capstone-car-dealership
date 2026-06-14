@@ -81,12 +81,12 @@ def login_user(request):
     if user is not None:
         login(request, user)
         return JsonResponse({
-            'status': True,
+            'status': 'Authenticated',
             'userName': username,
             'message': 'Login successful'
         })
     return JsonResponse({
-        'status': False,
+        'status': 'Failed',
         'userName': username,
         'message': 'Invalid username or password'
     }, status=401)
@@ -94,19 +94,18 @@ def login_user(request):
 
 @csrf_exempt
 def logout_user(request):
-    """POST /djangoapp/logout - logout current user."""
-    if request.method != 'POST':
-        return JsonResponse({'error': 'POST method required'}, status=400)
+    """GET or POST /djangoapp/logout - logout current user."""
     if request.user.is_authenticated:
         username = request.user.username
         logout(request)
         return JsonResponse({
             'status': True,
-            'userName': username,
+            'userName': '',
             'message': f'User {username} logged out successfully'
         })
     return JsonResponse({
-        'status': False,
+        'status': True,
+        'userName': '',
         'message': 'No user is currently logged in'
     })
 
@@ -173,10 +172,53 @@ def get_dealers_by_state(request, state):
     dealers = Dealer.objects.filter(state=state)
     if not dealers.exists():
         return JsonResponse({'status': False, 'error': f'No dealers found in {state}'}, status=404)
-    return JsonResponse({'status': True, 'dealers': [serialize_dealer(d) for d in dealers]})
+    return JsonResponse({
+        'status': True,
+        'dealers': [serialize_dealer_state(d) for d in dealers]
+    })
 
 
-def serialize_dealer(d):
+def serialize_dealer(d, include_contact=True, minimal=False):
+    """Serialize a Dealer to a JSON-friendly dict.
+
+    include_contact=False returns only the core fields (no phone/email).
+    minimal=True returns ONLY the fields required by the course rubric
+    for the "dealers by state" task: id, full_name, city, state,
+    address, zip.
+    """
+    if minimal:
+        return {
+            'id': d.id,
+            'full_name': d.full_name,
+            'city': d.city,
+            'state': d.state,
+            'address': d.address,
+            'zip': d.zip_code,
+        }
+    data = {
+        'id': d.id,
+        'full_name': d.full_name,
+        'short_name': d.short_name or d.full_name,
+        'city': d.city,
+        'state': d.state,
+        'address': d.address,
+        'zip': d.zip_code,
+        'latitude': d.latitude,
+        'longitude': d.longitude,
+    }
+    if include_contact:
+        data.update({
+            'phone': d.phone,
+            'email': d.email,
+            'logo_url': d.logo_url,
+            'website': d.website,
+        })
+    return data
+
+
+def serialize_dealer_state(d):
+    """Fields for /dealers/state/<state>: id, full_name, short_name,
+    city, state, address, zip, latitude, longitude. NO phone/email."""
     return {
         'id': d.id,
         'full_name': d.full_name,
@@ -185,10 +227,8 @@ def serialize_dealer(d):
         'state': d.state,
         'address': d.address,
         'zip': d.zip_code,
-        'phone': d.phone,
-        'email': d.email,
-        'logo_url': d.logo_url,
-        'website': d.website,
+        'latitude': d.latitude,
+        'longitude': d.longitude,
     }
 
 
@@ -226,11 +266,36 @@ def add_review(request):
         return JsonResponse({'error': 'Dealer not found'}, status=404)
     review_text = data.get('review', '')
     sentiment, score = analyze_sentiment(review_text)
+
+    # Optional related objects
+    car_make = None
+    car_make_id = data.get('car_make_id') or data.get('car_make')
+    if car_make_id:
+        try:
+            car_make = CarMake.objects.get(id=car_make_id)
+        except (CarMake.DoesNotExist, ValueError, TypeError):
+            car_make = None
+
+    # Optional purchase date (string YYYY-MM-DD or YYYY)
+    purchase_date = None
+    pd = data.get('purchase_date')
+    if pd:
+        try:
+            from datetime import date
+            if len(str(pd)) == 4:
+                purchase_date = date(int(pd), 1, 1)
+            else:
+                purchase_date = date.fromisoformat(str(pd))
+        except (ValueError, TypeError):
+            purchase_date = None
+
     review = Review.objects.create(
         dealer=dealer,
         name=request.user.username,
         review_text=review_text,
         purchase=data.get('purchase', False),
+        purchase_date=purchase_date,
+        car_make=car_make,
         car_year=data.get('car_year'),
         sentiment=sentiment,
     )
@@ -283,6 +348,32 @@ def get_all_car_makes(request):
     return JsonResponse({'status': True, 'car_makes': data})
 
 
+def get_cars(request):
+    """GET /djangoapp/get_cars - all car makes with their models.
+
+    Returns the same data as /djangoapp/carmakes but with the outer key
+    named "CarModels" (as required by the course rubric).
+    """
+    makes = CarMake.objects.prefetch_related('car_models').all()
+    data = []
+    for m in makes:
+        data.append({
+            'id': m.id,
+            'name': m.name,
+            'description': m.description,
+            'models': [
+                {
+                    'id': cm.id,
+                    'name': cm.name,
+                    'carMake': m.name,
+                    'type': cm.type,
+                    'year': cm.year,
+                } for cm in m.car_models.all()
+            ],
+        })
+    return JsonResponse({'status': True, 'CarModels': data})
+
+
 # ============================================================
 # Sentiment Analysis
 # ============================================================
@@ -298,6 +389,26 @@ def analyze_review(request):
             text = data.get('text', '')
         except json.JSONDecodeError:
             text = ''
+    if not text:
+        return JsonResponse({'status': False, 'error': 'text is required'}, status=400)
+    sentiment, score = analyze_sentiment(text)
+    return JsonResponse({
+        'status': True,
+        'text': text,
+        'sentiment': sentiment,
+        'score': score,
+    })
+
+
+def analyze_review_path(request, text):
+    """GET /djangoapp/analyze/<text> - analyze sentiment of a review text.
+
+    Same response as /analyze?text= but the review text is part of the URL
+    path, e.g. /djangoapp/analyze/Fantastic%20services
+    """
+    # Unquote in case the URL contains percent-escaped characters.
+    from urllib.parse import unquote
+    text = unquote(text)
     if not text:
         return JsonResponse({'status': False, 'error': 'text is required'}, status=400)
     sentiment, score = analyze_sentiment(text)

@@ -12,6 +12,32 @@ Output:
   "dealer_id": 1,
   "reviews": [
     {
+      "id": 10,
+      "dealer_id": 1,
+      "name": "John Smith",
+      "review": "Fantastic services! The team was friendly and professional.",
+      "purchase": true,
+      "purchase_date": null,
+      "car_make": "Toyota",
+      "car_model": "Camry",
+      "car_year": 2023,
+      "sentiment": "positive",
+      "created_at": "2026-06-14T17:14:43.796248+00:00"
+    },
+    {
+      "id": 9,
+      "dealer_id": 1,
+      "name": "testuser",
+      "review": "Great service, very happy with my purchase!",
+      "purchase": true,
+      "purchase_date": null,
+      "car_make": null,
+      "car_model": null,
+      "car_year": 2024,
+      "sentiment": "positive",
+      "created_at": "2026-06-14T17:03:37.637532+00:00"
+    },
+    {
       "id": 7,
       "dealer_id": 1,
       "name": "Robert Taylor",

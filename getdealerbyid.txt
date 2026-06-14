@@ -17,6 +17,8 @@ Output:
     "state": "KS",
     "address": "123 Main St",
     "zip": "66101",
+    "latitude": 39.1141,
+    "longitude": -94.6275,
     "phone": "555-0101",
     "email": "sales@bestcarskc.com",
     "logo_url": "https://images.unsplash.com/photo-1562519819-016930ada31b?w=400",
