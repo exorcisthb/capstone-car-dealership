@@ -5,6 +5,10 @@
 # ============================================================
 set -e
 
+echo "=== [0/6] Installing system dependencies ==="
+sudo apt-get update -qq
+sudo apt-get install -y -qq python3-venv python3-pip ngrok > /dev/null 2>&1
+
 cd ~
 
 echo "=== [1/6] Cloning repository ==="
@@ -30,7 +34,7 @@ cd ..
 
 echo "=== [5/6] Downloading ngrok ==="
 if [ ! -f "ngrok" ]; then
-    NGROK_URL=$(curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz && echo "downloaded")
+    curl -sL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz -o ngrok.tgz
     tar -xzf ngrok.tgz
     rm ngrok.tgz
     chmod +x ngrok
